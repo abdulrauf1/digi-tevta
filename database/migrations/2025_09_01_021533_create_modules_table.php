@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('modules', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('competency_standard');
+            $table->string('name');            
+            $table->string('assesment_package_link');
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

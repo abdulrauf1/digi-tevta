@@ -1,10 +1,12 @@
 <?php
+// app/Models/Course.php
 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany; // Add this import
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo; // Add this import
 
 class Course extends Model
 {
@@ -13,7 +15,8 @@ class Course extends Model
         'description',
         'duration',
         'method',
-        'field'
+        'field',
+        'trainer_id' // Add trainer_id to fillable
     ];
 
     public function modules(): HasMany
@@ -30,5 +33,11 @@ class Course extends Model
     {
         return $this->belongsToMany(Trainee::class, 'course_trainee')
                     ->withTimestamps();
+    }
+
+    // Add relationship to Trainer
+    public function trainer(): BelongsTo
+    {
+        return $this->belongsTo(Trainer::class);
     }
 }

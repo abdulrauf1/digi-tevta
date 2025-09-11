@@ -14,7 +14,7 @@ return new class extends Migration
          Schema::create('evidences', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('assessment_package_id')->constrained()->onDelete('cascade');
+            $table->foreignId('trainee_assessment_files_id')->constrained()->onDelete('cascade');
             $table->string('type');
             $table->string('link');
             $table->timestamps();

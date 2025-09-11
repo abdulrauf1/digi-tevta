@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('enrollments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('course_id')->constrained()->onDelete('cascade');
-            $table->string('session');
-            $table->foreignId('trainee_id')->constrained()->onDelete('cascade');
-            $table->foreignId('trainer_id')->constrained()->onDelete('cascade');
+            $table->foreignId('course_id')->constrained()->onDelete('cascade');            
+            $table->foreignId('session_id')->nullable()->constrained('enrollment_sessions')->onDelete('cascade');
+            $table->foreignId('trainee_id')->constrained()->onDelete('cascade');            
+            $table->enum('status', ['pending', 'confirm', 'cancel', 'altered'])->default('confirm');
             $table->timestamps();
         });
+
+        
     }
 
     /**

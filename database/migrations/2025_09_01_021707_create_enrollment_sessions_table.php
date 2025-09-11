@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('assessment_packages', function (Blueprint $table) {
+        Schema::create('enrollment_sessions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('module_id')->constrained()->onDelete('cascade');
-            $table->enum('type', ['formative', 'integrated']);
-            $table->string('evidence_guide_link')->nullable();
+            $table->text('description')->nullable();
+            $table->string('duration')->default('6 months');
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->enum('status', ['upcoming', 'ongoing', 'completed'])->default('upcoming');            
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('assessment_packages');
+        Schema::dropIfExists('enrollment_sessions');
     }
 };

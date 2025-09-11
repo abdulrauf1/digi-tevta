@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->unique();
             $table->string('name');
             $table->text('description');
-            $table->integer('duration'); // in hours/days
+            $table->integer('duration'); // in hours/days            
             $table->enum('method', ['CBT', 'Traditional']);
             $table->string('field');
+            $table->foreignId('trainer_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

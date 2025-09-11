@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Add this
             
             $table->string('cnic');
-            $table->enum('gender', ['Male', 'Female', 'Other']);
+            $table->enum('gender', ['Male', 'Female', 'Other','N/A']);
             $table->string('contact');
             $table->string('specialization'); // Add this
             $table->integer('experience_years'); // Add this

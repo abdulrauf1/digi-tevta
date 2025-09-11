@@ -10,8 +10,11 @@ class TraineeAssessmentFile extends Model
     protected $fillable = [
         'enrollment_id',
         'attendance_percentage',
-        'evidence_id',
-        'file_path',
+        'module_id',
+        'type',
+        'status',
+        'evidence_guide_link',
+        'result',
         'comments'
     ];
 

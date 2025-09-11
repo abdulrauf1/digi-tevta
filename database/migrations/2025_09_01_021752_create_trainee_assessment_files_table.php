@@ -15,9 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('enrollment_id')->constrained()->onDelete('cascade');
             $table->decimal('attendance_percentage', 5, 2);    
-            $table->unsignedBigInteger('evidence_id');        
-            $table->foreign('evidence_id')->references('id')->on('evidences')->onDelete('cascade');
-            $table->string('file_path');
+            $table->foreignId('module_id')->constrained()->onDelete('cascade');
+            $table->enum('type', ['formative', 'integrated']);
+            $table->enum('status', ['pending', 'completed', 'incomplete'])->default('pending');
+            $table->date('submission_date')->nullable();
+            $table->string('evidence_guide_link');   
+            $table->enum('result', ['competent', 'not yet competent', 'incomplete'])->default('incomplete');         
             $table->text('comments')->nullable();
             $table->timestamps();
         });

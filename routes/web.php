@@ -72,9 +72,29 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     // Trainees
     Route::resource('trainees', AdminTraineeController::class);
     
+    // Routes for bulk import functionality
+    
+    Route::post('trainees/bulk-import', [AdminTraineeController::class, 'bulkImport'])->name('trainees.bulk-import');
+
     // Reports
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 });
+
+
+Route::get('/trainees/download-template', function() {
+    $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="trainees_template.csv"',
+            'Access-Control-Allow-Origin' => '*', // For CORS
+        ];
+
+        $template = "name,email,cnic,gender,date_of_birth,contact,emergency_contact,domicile,education_level,address\n";
+        $template .= "John Doe,john@example.com,42201-1234567-1,Male,1990-05-15,03001234567,03009876543,Islamabad,Bachelor,123 Main Street\n";
+
+        return response()->make($template, 200, $headers);
+})->name('admin.trainees.download-template');
+
+
 
 Route::middleware(['auth', 'role:admission-clerk'])->group(function () {
     Route::get('/admission/dashboard', [AdmissionController::class, 'index'])->name('admission.dashboard');

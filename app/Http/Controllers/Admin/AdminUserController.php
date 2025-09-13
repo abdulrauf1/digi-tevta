@@ -50,7 +50,7 @@ class AdminUserController extends Controller
         }
         
         $users = $query->paginate(10)->appends($request->except('page'));
-        
+        // dd($users);
         return view('admin.users.index', compact('users'));
     }
 
@@ -97,7 +97,7 @@ class AdminUserController extends Controller
                 'user_id' => $user->id,
                 'cnic' => '',
                 'gender' => 'N/A',
-                'date_of_birth' => '',
+                'date_of_birth' => '2000-01-01',
                 'contact' => '',
                 'emergency_contact' => '',
                 'domicile' => '',

@@ -56,6 +56,7 @@
                                 <select name="role" id="role" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-600 dark:text-white">
                                     <option value="">All Roles</option>
                                     <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                                    <option value="admission-clerk" {{ request('role') == 'admission-clerk' ? 'selected' : '' }}>Admission-Clerk</option>                                    
                                     <option value="trainer" {{ request('role') == 'trainer' ? 'selected' : '' }}>Trainer</option>
                                     <option value="trainee" {{ request('role') == 'trainee' ? 'selected' : '' }}>Trainee</option>
                                 </select>
@@ -121,6 +122,7 @@
                                         @foreach($user->roles as $role)
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
                                                 {{ $role->name == 'admin' ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200' : '' }}
+                                                {{ $role->name == 'admission-clerk' ? 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200' : '' }}
                                                 {{ $role->name == 'trainer' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' : '' }}
                                                 {{ $role->name == 'trainee' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : '' }}">
                                                 {{ ucfirst($role->name) }}
@@ -132,9 +134,12 @@
                                             <a href="{{ route('admin.users.show', $user) }}" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300" title="View">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('admin.users.edit', $user) }}" class="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300" title="Edit">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
+
+                                            @if( $role->name == 'admin' || $role->name == 'admission-clerk')
+                                                <a href="{{ route('admin.users.edit', $user) }}" class="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                            @endif
                                             <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline-block">
                                                 @csrf
                                                 @method('DELETE')

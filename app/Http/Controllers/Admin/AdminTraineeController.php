@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 use App\Models\User;
 use App\Models\Trainee;
 use App\Http\Controllers\Controller;    
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 
 use Illuminate\Http\Request;
@@ -105,5 +108,149 @@ class AdminTraineeController extends Controller
         
         return redirect()->route('admin.trainees.index')
             ->with('success', 'Trainee deleted successfully.');
+    }
+
+    /**
+     * Download CSV template for bulk import
+     */
+    public function downloadTemplate()
+    {
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="trainees_template.csv"',
+            'Access-Control-Allow-Origin' => '*', // For CORS
+        ];
+
+        $template = "name,email,password,cnic,gender,date_of_birth,contact,emergency_contact,domicile,education_level,address\n";
+        $template .= "John Doe,john@example.com,password123,42201-1234567-1,Male,1990-05-15,03001234567,03009876543,Islamabad,Bachelor,123 Main Street\n";
+
+        return response()->make($template, 200, $headers);
+    }
+
+    /**
+     * Process bulk import of trainees
+     */
+    public function bulkImport(Request $request)
+    {
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'csv_file' => 'required|file|mimes:csv,txt|max:5120',            
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $file = $request->file('csv_file');
+        
+        // Process the CSV file
+        $importCount = 0;
+        $errors = [];
+        
+        if (($handle = fopen($file->getPathname(), 'r')) !== false) {
+            // Skip headers if present
+            
+            $rowNumber = 2;
+            
+            while (($data = fgetcsv($handle)) !== false) {
+                // Skip empty rows
+                if (empty(array_filter($data))) {
+                    $rowNumber++;
+                    continue;
+                }
+                
+                // Validate row data
+                if (count($data) < 11) {
+                    $errors[] = "Row $rowNumber: Insufficient data columns";
+                    $rowNumber++;
+                    continue;
+                }
+                
+                try {
+                    // Validate user data
+                    $userValidator = Validator::make([
+                        'name' => $data[0],
+                        'email' => $data[1],
+                    ], [
+                        'name' => 'required|string|max:255',
+                        'email' => 'required|email|unique:users,email',
+                    ]);
+                    
+                    if ($userValidator->fails()) {
+                        $errors[] = "Row $rowNumber: User validation failed - " . implode(', ', $userValidator->errors()->all());
+                        $rowNumber++;
+                        continue;
+                    }
+                    
+                    // Validate trainee data
+                    $traineeValidator = Validator::make([
+                        'cnic' => $data[3],
+                        'gender' => $data[4],
+                        'date_of_birth' => $data[5],
+                        'contact' => $data[6],
+                        'emergency_contact' => $data[7],
+                        'domicile' => $data[8],
+                        'education_level' => $data[9],
+                        'address' => $data[10],
+                    ], [
+                        'cnic' => 'required|string|max:20|unique:trainees,cnic',
+                        'gender' => 'required|in:Male,Female,Other,N/A',
+                        'date_of_birth' => 'required|date',
+                        'contact' => 'required|string|max:20',
+                        'emergency_contact' => 'required|string|max:20',
+                        'domicile' => 'required|string|max:100',
+                        'education_level' => 'required|string|max:100',
+                        'address' => 'required|string',
+                    ]);
+                    
+                    if ($traineeValidator->fails()) {
+                        $errors[] = "Row $rowNumber: Trainee validation failed - " . implode(', ', $traineeValidator->errors()->all());
+                        $rowNumber++;
+                        continue;
+                    }
+                    
+                    // Create user
+                    $user = User::create([
+                        'name' => $data[0],
+                        'email' => $data[1],
+                        'password' => Hash::make($data[0]),
+                    ]);
+                    
+                    $user->assignRole('trainee');
+                    // Create trainee
+                    Trainee::create([
+                        'user_id' => $user->id,
+                        'cnic' => $data[3],
+                        'gender' => $data[4],
+                        'date_of_birth' => $data[5],
+                        'contact' => $data[6],
+                        'emergency_contact' => $data[7],
+                        'domicile' => $data[8],
+                        'education_level' => $data[9],
+                        'address' => $data[10],
+                    ]);
+                    
+                    $importCount++;
+                } catch (\Exception $e) {
+                    $errors[] = "Row $rowNumber: " . $e->getMessage();
+                }
+                
+                $rowNumber++;
+            }
+            
+            fclose($handle);
+        }
+        
+        if ($importCount > 0) {
+            return redirect()->route('admin.trainees.index')
+                ->with('bulk_import_success', true)
+                ->with('success', "Successfully imported $importCount trainees" . (count($errors) > 0 ? " with " . count($errors) . " errors" : ""));
+        } else {
+            return redirect()->back()
+                ->withErrors(['import' => 'No trainees were imported. ' . implode('; ', $errors)])
+                ->withInput();
+        }
     }
 }

@@ -47,9 +47,7 @@
                                 <select name="role" id="role" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white">
                                     <option value="">Select Role</option>
                                     <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                                    <option value="admission-clerk" {{ old('role') == 'admission-clerk' ? 'selected' : '' }}>Admission-Clerk</option>
-                                    <option value="trainer" {{ old('role') == 'trainer' ? 'selected' : '' }}>Trainer</option>
-                                    <option value="trainee" {{ old('role') == 'trainee' ? 'selected' : '' }}>Trainee</option>
+                                    <option value="admission-clerk" {{ old('role') == 'admission-clerk' ? 'selected' : '' }}>Admission-Clerk</option>                                    
                                 </select>
                                 @error('role')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>

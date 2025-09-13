@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('description');
             $table->integer('duration'); // in hours/days            
             $table->enum('method', ['CBT', 'Traditional']);
+            $table->enum('status', ['active', 'in-active'])->default('active');
             $table->string('field');
             $table->foreignId('trainer_id')->constrained()->onDelete('cascade');
             $table->timestamps();

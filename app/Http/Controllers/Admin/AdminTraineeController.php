@@ -162,7 +162,7 @@ class AdminTraineeController extends Controller
                 }
                 
                 // Validate row data
-                if (count($data) < 11) {
+                if (count($data) < 10) {
                     $errors[] = "Row $rowNumber: Insufficient data columns";
                     $rowNumber++;
                     continue;
@@ -186,14 +186,14 @@ class AdminTraineeController extends Controller
                     
                     // Validate trainee data
                     $traineeValidator = Validator::make([
-                        'cnic' => $data[3],
-                        'gender' => $data[4],
-                        'date_of_birth' => $data[5],
-                        'contact' => $data[6],
-                        'emergency_contact' => $data[7],
-                        'domicile' => $data[8],
-                        'education_level' => $data[9],
-                        'address' => $data[10],
+                        'cnic' => $data[2],
+                        'gender' => $data[3],
+                        'date_of_birth' => $data[4],
+                        'contact' => $data[5],
+                        'emergency_contact' => $data[6],
+                        'domicile' => $data[7],
+                        'education_level' => $data[8],
+                        'address' => $data[9],
                     ], [
                         'cnic' => 'required|string|max:20|unique:trainees,cnic',
                         'gender' => 'required|in:Male,Female,Other,N/A',
@@ -222,14 +222,14 @@ class AdminTraineeController extends Controller
                     // Create trainee
                     Trainee::create([
                         'user_id' => $user->id,
-                        'cnic' => $data[3],
-                        'gender' => $data[4],
-                        'date_of_birth' => $data[5],
-                        'contact' => $data[6],
-                        'emergency_contact' => $data[7],
-                        'domicile' => $data[8],
-                        'education_level' => $data[9],
-                        'address' => $data[10],
+                        'cnic' => $data[2],
+                        'gender' => $data[3],
+                        'date_of_birth' => $data[4],
+                        'contact' => $data[5],
+                        'emergency_contact' => $data[6],
+                        'domicile' => $data[7],
+                        'education_level' => $data[8],
+                        'address' => $data[9],
                     ]);
                     
                     $importCount++;

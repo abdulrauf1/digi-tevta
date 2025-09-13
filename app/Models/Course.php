@@ -23,6 +23,11 @@ class Course extends Model
     {
         return $this->hasMany(Module::class);
     }
+    
+    public function sessions()
+    {
+        return $this->hasMany(EnrollmentSession::class);
+    }
 
     public function enrollments(): HasMany
     {

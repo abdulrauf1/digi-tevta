@@ -23,7 +23,7 @@
                             <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                             </svg>
-                            <a href="{{ route('admin.courses.index') }}" class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">Courses</a>
+                            <a href="{{ route('admin-clerk.courses.index') }}" class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">Courses</a>
                         </div>
                     </li>
                     <li>
@@ -31,7 +31,7 @@
                             <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                             </svg>
-                            <a href="{{ route('admin.courses.show', $course) }}" class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">{{ $course->name }}</a>
+                            <a href="{{ route('admin-clerk.courses.show', $course) }}" class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">{{ $course->name }}</a>
                         </div>
                     </li>
                     <li aria-current="page">
@@ -47,7 +47,7 @@
 
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form method="POST" action="{{ route('admin.courses.update', $course) }}" enctype="multipart/form-data" id="course-edit-form">
+                    <form method="POST" action="{{ route('admin-clerk.courses.update', $course) }}" enctype="multipart/form-data" id="course-edit-form">
                         @csrf
                         @method('PUT')
 
@@ -136,7 +136,7 @@
 
                         <div class="pt-5">
                             <div class="flex justify-end">
-                                <a href="{{ route('admin.courses.show', $course) }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-3 transition duration-150 ease-in-out">Cancel</a>
+                                <a href="{{ route('admin-clerk.courses.show', $course) }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-3 transition duration-150 ease-in-out">Cancel</a>
                                 <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-150 ease-in-out">Update Course</button>
                             </div>
                         </div>

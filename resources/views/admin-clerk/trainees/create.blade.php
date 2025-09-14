@@ -6,7 +6,7 @@
                     {{ __('Create New Trainee') }}
                 </h2>
                 <div class="flex space-x-2">
-                    <a href="{{ route('admin.trainees.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-md">
+                    <a href="{{ route('admin-clerk.trainees.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-md">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
                         </svg>
@@ -31,7 +31,7 @@
                             <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                             </svg>
-                            <a href="{{ route('admin.trainees.index') }}" class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white">Trainees</a>
+                            <a href="{{ route('admin-clerk.trainees.index') }}" class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white">Trainees</a>
                         </div>
                     </li>
                     <li aria-current="page">
@@ -56,7 +56,7 @@
                         <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Fill in the trainee's personal information and account details.</p>
                     </div>
                     
-                    <form method="POST" action="{{ route('admin.trainees.store') }}">
+                    <form method="POST" action="{{ route('admin-clerk.trainees.store') }}">
                         @csrf
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -261,7 +261,7 @@
                         </div>
 
                         <div class="flex justify-end mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-                            <a href="{{ route('admin.trainees.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-medium rounded-md transition-colors duration-150 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white mr-3">
+                            <a href="{{ route('admin-clerk.trainees.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-medium rounded-md transition-colors duration-150 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white mr-3">
                                 Cancel
                             </a>
                             <button type="submit" class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md transition-colors duration-150 shadow-sm">

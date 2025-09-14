@@ -38,7 +38,7 @@
                                 <i class="fas fa-file-import mr-2"></i>
                                 Bulk Import
                             </button>
-                            <a href="{{ route('admin.trainees.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg flex items-center transition-colors duration-200">
+                            <a href="{{ route('admin-clerk.trainees.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg flex items-center transition-colors duration-200">
                                 <i class="fas fa-plus mr-2"></i>
                                 Add New Trainee
                             </a>
@@ -133,13 +133,13 @@
                                     <td class="px-6 py-4 whitespace-nowrap">{{ Str::limit($trainee->address, 20) }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <div class="flex items-center space-x-3">
-                                            <a href="{{ route('admin.trainees.show', $trainee) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200" title="View">
+                                            <a href="{{ route('admin-clerk.trainees.show', $trainee) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200" title="View">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('admin.trainees.edit', $trainee) }}" class="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300 transition-colors duration-200" title="Edit">
+                                            <a href="{{ route('admin-clerk.trainees.edit', $trainee) }}" class="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300 transition-colors duration-200" title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form action="{{ route('admin.trainees.destroy', $trainee) }}" method="POST" class="inline-block">
+                                            <form action="{{ route('admin-clerk.trainees.destroy', $trainee) }}" method="POST" class="inline-block">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors duration-200" title="Delete" onclick="return confirm('Are you sure you want to delete this trainee?')">
@@ -173,7 +173,7 @@
                     </button>
                 </div>
                 
-                <form id="bulkImportForm" action="{{ route('admin.trainees.bulk-import') }}" method="POST" enctype="multipart/form-data">
+                <form id="bulkImportForm" action="{{ route('admin-clerk.trainees.bulk-import') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="mt-6">
                         <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg mb-6">
@@ -221,7 +221,7 @@
                                 
                                 <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg mb-4">
                                     <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">Download our CSV template to ensure your file has the correct format:</p>
-                                    <a href="{{ route('admin.trainees.download-template') }}" class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-md transition-colors duration-200" id="downloadTemplateBtn">
+                                    <a href="{{ route('trainees.download-template') }}" class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-md transition-colors duration-200" id="downloadTemplateBtn">
                                         <i class="fas fa-file-download mr-2"></i>
                                         Download Template
                                     </a>
@@ -377,7 +377,7 @@
                 // Create a hidden iframe to handle the download
                 const iframe = document.createElement('iframe');
                 iframe.style.display = 'none';
-                iframe.src = "{{ route('admin.trainees.download-template') }}";
+                iframe.src = "{{ route('trainees.download-template') }}";
                 
                 iframe.onload = function() {
                     // Restore button state after a short delay

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin_Clerk;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
@@ -8,7 +8,7 @@ use App\Models\Module;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class AdminModuleController extends Controller
+class ModuleController extends Controller
 {
     public function store(Request $request)
     {
@@ -30,7 +30,7 @@ class AdminModuleController extends Controller
 
         $module->save();
 
-        return redirect()->route('admin.courses.show', $validated['course_id'])
+        return redirect()->route('admin-clerk.courses.show', $validated['course_id'])
             ->with('success', 'Module added successfully.');
     }
 
@@ -55,7 +55,7 @@ class AdminModuleController extends Controller
             $module->update(['assesment_package_link' => $filePath]);
         }
 
-        return redirect()->route('admin.courses.show', $module->course_id)
+        return redirect()->route('admin-clerk.courses.show', $module->course_id)
             ->with('success', 'Module updated successfully.');
     }
 
@@ -70,7 +70,7 @@ class AdminModuleController extends Controller
         $courseId = $module->course_id;
         $module->delete();
 
-        return redirect()->route('admin.courses.show', $courseId)
+        return redirect()->route('admin-clerk.courses.show', $courseId)
             ->with('success', 'Module deleted successfully.');
     }
 }

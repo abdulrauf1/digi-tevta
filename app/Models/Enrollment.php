@@ -13,7 +13,8 @@ class Enrollment extends Model
         'course_id',
         'session_id',
         'trainee_id',
-        'trainer_id'
+        'trainer_id',
+        'status'
     ];
 
     public function course(): BelongsTo

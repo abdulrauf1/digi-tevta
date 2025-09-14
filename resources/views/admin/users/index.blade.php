@@ -134,8 +134,8 @@
                                             <a href="{{ route('admin.users.show', $user) }}" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300" title="View">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-
-                                            @if( $role->name == 'admin' || $role->name == 'admission-clerk')
+                                            
+                                            @if(optional($user->roles->first())->name == 'admin' || optional($user->roles->first())->name == 'admission-clerk')
                                                 <a href="{{ route('admin.users.edit', $user) }}" class="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300" title="Edit">
                                                     <i class="fas fa-edit"></i>
                                                 </a>

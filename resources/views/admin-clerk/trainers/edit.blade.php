@@ -23,7 +23,7 @@
                             <svg class="rtl:rotate-180 w-4 h-4 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                             </svg>
-                            <a href="{{ route('admin.trainers.index') }}" class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">Trainers</a>
+                            <a href="{{ route('admin-clerk.trainers.index') }}" class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">Trainers</a>
                         </div>
                     </li>
                     <li>
@@ -31,7 +31,7 @@
                             <svg class="rtl:rotate-180 w-4 h-4 text极ray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                             </svg>
-                            <a href="{{ route('admin.trainers.show', $trainer) }}" class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">{{ $trainer->name }}</a>
+                            <a href="{{ route('admin-clerk.trainers.show', $trainer) }}" class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">{{ $trainer->name }}</a>
                         </div>
                     </li>
                     <li aria-current="page">
@@ -60,7 +60,7 @@
                 </div>
 
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form method="POST" action="{{ route('admin.trainers.update', $trainer) }}">
+                    <form method="POST" action="{{ route('admin-clerk.trainers.update', $trainer) }}">
                         @csrf
                         @method('PUT')
 
@@ -192,7 +192,7 @@
 
                         <!-- Form Actions -->
                         <div class="flex justify-end mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-                            <a href="{{ route('admin.trainers.show', $trainer) }}" class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-md shadow-sm transition duration-150 ease-in-out mr-3">
+                            <a href="{{ route('admin-clerk.trainers.show', $trainer) }}" class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-md shadow-sm transition duration-150 ease-in-out mr-3">
                                 Cancel
                             </a>
                             <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-md shadow-sm transition duration-150 ease-in-out flex items-center">

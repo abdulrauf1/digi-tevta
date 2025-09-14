@@ -33,7 +33,7 @@
                             <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Course Catalog</h3>
                             <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Manage all your training courses in one place</p>
                         </div>
-                        <a href="{{ route('admin.courses.create') }}" class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all duration-200 transform hover:-translate-y-1 flex items-center">
+                        <a href="{{ route('admin-clerk.courses.create') }}" class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all duration-200 transform hover:-translate-y-1 flex items-center">
                             <i class="fas fa-plus-circle mr-2"></i>
                             Create New Course
                         </a>
@@ -130,13 +130,13 @@
                                     
                                     <!-- Action Buttons -->
                                     <div class="flex justify-between items-center pt-3 border-t border-gray-100 dark:border-gray-600">
-                                        <a href="{{ route('admin.courses.show', $course) }}" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200 flex items-center">
+                                        <a href="{{ route('admin-clerk.courses.show', $course) }}" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200 flex items-center">
                                             <i class="fas fa-eye mr-1"></i> View
                                         </a>
-                                        <a href="{{ route('admin.courses.edit', $course) }}" class="text-yellow-600 hover:text-yellow-800 dark:text-yellow-400 dark:hover:text-yellow-300 transition-colors duration-200 flex items-center">
+                                        <a href="{{ route('admin-clerk.courses.edit', $course) }}" class="text-yellow-600 hover:text-yellow-800 dark:text-yellow-400 dark:hover:text-yellow-300 transition-colors duration-200 flex items-center">
                                             <i class="fas fa-edit mr-1"></i> Edit
                                         </a>
-                                        <form action="{{ route('admin.courses.destroy', $course) }}" method="POST" class="inline-block">
+                                        <form action="{{ route('admin-clerk.courses.destroy', $course) }}" method="POST" class="inline-block">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition-colors duration-200 flex items-center" onclick="return confirm('Are you sure you want to delete this course?')">
@@ -156,7 +156,7 @@
                             </div>
                             <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No courses yet</h3>
                             <p class="text-gray-500 dark:text-gray-400 mb-6">Get started by creating your first course</p>
-                            <a href="{{ route('admin.courses.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition ease-in-out duration-150">
+                            <a href="{{ route('admin-clerk.courses.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition ease-in-out duration-150">
                                 <i class="fas fa-plus mr-2"></i> Create First Course
                             </a>
                         </div>

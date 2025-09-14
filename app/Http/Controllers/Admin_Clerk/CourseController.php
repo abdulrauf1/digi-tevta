@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin_Clerk;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
@@ -9,20 +9,20 @@ use App\Models\Module;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class AdminCourseController extends Controller
+class CourseController extends Controller
 {
     public function index()
     {
         $courses = Course::with(['trainer', 'trainer.user', 'modules'])->paginate(10);
         
-        return view('admin.courses.index', compact('courses'));
+        return view('admin-clerk.courses.index', compact('courses'));
     }
 
     public function create()
     {
         $trainers = Trainer::all()->load('user');
         
-        return view('admin.courses.create', compact('trainers'));
+        return view('admin-clerk.courses.create', compact('trainers'));
     }
 
     public function store(Request $request)
@@ -48,7 +48,7 @@ class AdminCourseController extends Controller
         ]);
 
         
-        return redirect()->route('admin.courses.index')
+        return redirect()->route('admin-clerk.courses.index')
             ->with('success', 'Course created successfully.');
     }
 
@@ -56,14 +56,14 @@ class AdminCourseController extends Controller
     {
         $course->load('trainer', 'trainer.user', 'modules');
         
-        return view('admin.courses.show', compact('course'));
+        return view('admin-clerk.courses.show', compact('course'));
     }
 
     public function edit(Course $course)
     {
         $trainers = Trainer::all();
         $course->load('modules');
-        return view('admin.courses.edit', compact('course', 'trainers'));
+        return view('admin-clerk.courses.edit', compact('course', 'trainers'));
     }
 
     public function update(Request $request, Course $course)
@@ -89,7 +89,7 @@ class AdminCourseController extends Controller
         ]);
 
         
-        return redirect()->route('admin.courses.show', $course)
+        return redirect()->route('admin-clerk.courses.show', $course)
             ->with('success', 'Course updated successfully.');
     }
 
@@ -107,7 +107,7 @@ class AdminCourseController extends Controller
         
         $course->delete();
         
-        return redirect()->route('admin.courses.index')
+        return redirect()->route('admin-clerk.courses.index')
             ->with('success', 'Course deleted successfully.');
     }
 }

@@ -117,7 +117,7 @@
                 <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
                     <h4 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Quick Actions</h4>
                     <div class="grid grid-cols-1 gap-4">
-                        <a href="{{ route('admin.courses.create') }}" class="flex items-center p-3 bg-blue-50 dark:bg-blue-900 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-800 transition">
+                        <a href="{{ route('admin-clerk.courses.create') }}" class="flex items-center p-3 bg-blue-50 dark:bg-blue-900 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-800 transition">
                             <div class="p-2 rounded-full bg-blue-500 text-white mr-3">
                                 <i class="fas fa-plus"></i>
                             </div>
@@ -136,7 +136,7 @@
                             <span class="text-gray-900 dark:text-white">Add New Trainee</span>
                         </a>
                         <!-- route('enrollments.create') -->
-                        <a href="" class="flex items-center p-3 bg-yellow-50 dark:bg-yellow-900 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-800 transition">
+                        <a href="{{ route('admin-clerk.enrollments.create') }}" class="flex items-center p-3 bg-yellow-50 dark:bg-yellow-900 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-800 transition">
                             <div class="p-2 rounded-full bg-yellow-500 text-white mr-3">
                                 <i class="fas fa-clipboard-check"></i>
                             </div>

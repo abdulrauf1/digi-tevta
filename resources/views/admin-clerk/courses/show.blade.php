@@ -23,7 +23,7 @@
                             <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                             </svg>
-                            <a href="{{ route('admin.courses.index') }}" class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">Courses</a>
+                            <a href="{{ route('admin-clerk.courses.index') }}" class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">Courses</a>
                         </div>
                     </li>
                     <li aria-current="page">
@@ -113,7 +113,7 @@
                                                     <a href="#" data-modal-target="edit-module-modal" data-modal-toggle="edit-module-modal" 
                                                        data-module-id="{{ $module->id }}" data-module-name="{{ $module->name }}"
                                                        class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"><i class="fas fa-edit mr-1"></i> Edit</a>
-                                                    <form action="{{ route('admin.modules.destroy', $module) }}" method="POST" class="inline">
+                                                    <form action="{{ route('admin-clerk.modules.destroy', $module) }}" method="POST" class="inline">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300" 
@@ -136,8 +136,8 @@
 
                     <!-- Action Buttons -->
                     <div class="mt-8 flex justify-end space-x-3">
-                        <a href="{{ route('admin.courses.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition duration-150 ease-in-out">Back to Courses</a>
-                        <a href="{{ route('admin.courses.edit', $course) }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-150 ease-in-out">Edit Course</a>
+                        <a href="{{ route('admin-clerk.courses.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition duration-150 ease-in-out">Back to Courses</a>
+                        <a href="{{ route('admin-clerk.courses.edit', $course) }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-150 ease-in-out">Edit Course</a>
                     </div>
                 </div>
             </div>
@@ -150,7 +150,7 @@
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 <div class="px-6 py-6 lg:px-8">
                     <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Add New Module</h3>
-                    <form class="space-y-6" action="{{ route('admin.modules.store') }}" method="POST" enctype="multipart/form-data">
+                    <form class="space-y-6" action="{{ route('admin-clerk.modules.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="course_id" value="{{ $course->id }}">
                         <div>

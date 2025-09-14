@@ -9,7 +9,7 @@ use App\Models\Trainee;
 use App\Models\Trainer;
 use App\Models\User;
 
-class AdmissionController extends Controller
+class AdmissionDashboardController extends Controller
 {
     public function index()
     {

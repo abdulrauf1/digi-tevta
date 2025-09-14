@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin_Clerk;
+use App\Http\Controllers\Controller;
 
 use App\Models\Course;
 use App\Models\User;
@@ -48,7 +49,7 @@ class ReportController extends Controller
             ->get();
         
         
-        return view('admin.reports.index', compact(
+        return view('admin-clerk.reports.index', compact(
             'stats', 
             'enrollmentTrends', 
             'popularCourses',

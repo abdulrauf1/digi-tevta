@@ -11,7 +11,7 @@ use App\Models\TraineeAssessmentFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class TraineeController extends Controller
+class TraineeDashboardController extends Controller
 {
     public function index()
     {

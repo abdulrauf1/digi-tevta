@@ -36,7 +36,7 @@
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Trainer Management</h3>
                         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage all trainers in the system</p>
                     </div>
-                    <a href="{{ route('admin.trainers.create') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest transition ease-in-out duration-150">
+                    <a href="{{ route('admin-clerk.trainers.create') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest transition ease-in-out duration-150">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                         </svg>
@@ -137,13 +137,13 @@
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <div class="flex items-center justify-end space-x-2">
-                                                    <a href="{{ route('admin.trainers.show', $trainer->user) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-150" title="View Details">
+                                                    <a href="{{ route('admin-clerk.trainers.show', $trainer->user) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-150" title="View Details">
                                                         <i class="fas fa-eye mr-1"></i>
                                                     </a>
-                                                    <a href="{{ route('admin.trainers.edit', $trainer->user) }}" class="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300 transition-colors duration-150" title="Edit">
+                                                    <a href="{{ route('admin-clerk.trainers.edit', $trainer->user) }}" class="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300 transition-colors duration-150" title="Edit">
                                                         <i class="fas fa-edit mr-1"></i>
                                                     </a>
-                                                    <form action="{{ route('admin.trainers.destroy', $trainer->user) }}" method="POST" class="inline-block">
+                                                    <form action="{{ route('admin-clerk.trainers.destroy', $trainer->user) }}" method="POST" class="inline-block">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors duration-150" title="Delete" onclick="return confirm('Are you sure you want to delete this trainer?')">
@@ -171,7 +171,7 @@
                             </svg>
                             <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No trainers found</h3>
                             <p class="text-gray-500 dark:text-gray-400 mb-6">Get started by adding your first trainer to the system.</p>
-                            <a href="{{ route('admin.trainers.create') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest transition ease-in-out duration-150">
+                            <a href="{{ route('admin-clerk.trainers.create') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest transition ease-in-out duration-150">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                 </svg>

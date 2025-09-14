@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin_Clerk;
+
 use App\Models\User;
 use App\Models\Trainee;
 use App\Http\Controllers\Controller;    
@@ -11,17 +12,17 @@ use Illuminate\Support\Facades\Validator;
 
 use Illuminate\Http\Request;
 
-class AdminTraineeController extends Controller
+class TraineeController extends Controller
 {
     public function index()
     {
         $trainees = Trainee::with(['user'])->paginate(10);        
-        return view('admin.trainees.index', compact('trainees'));
+        return view('admin-clerk.trainees.index', compact('trainees'));
     }
 
     public function create()
     {
-        return view('admin.trainees.create');
+        return view('admin-clerk.trainees.create');
     }
 
     public function store(Request $request)
@@ -66,18 +67,18 @@ class AdminTraineeController extends Controller
             'address' => $validated['address'],            
         ]);
 
-        return redirect()->route('admin.trainees.index')
+        return redirect()->route('admin-clerk.trainees.index')
             ->with('success', 'Trainee created successfully.');
     }
 
     public function show(User $trainee)
     {
-        return view('admin.trainees.show', compact('trainee'));
+        return view('admin-clerk.trainees.show', compact('trainee'));
     }
 
     public function edit(User $trainee)
     {
-        return view('admin.trainees.edit', compact('trainee'));
+        return view('admin-clerk.trainees.edit', compact('trainee'));
     }
 
     public function update(Request $request, User $trainee)
@@ -98,7 +99,7 @@ class AdminTraineeController extends Controller
         
         $trainee->update($validated);
         
-        return redirect()->route('admin.trainees.index')
+        return redirect()->route('admin-clerk.trainees.index')
             ->with('success', 'Trainee updated successfully.');
     }
 
@@ -106,7 +107,7 @@ class AdminTraineeController extends Controller
     {
         $trainee->delete();
         
-        return redirect()->route('admin.trainees.index')
+        return redirect()->route('admin-clerk.trainees.index')
             ->with('success', 'Trainee deleted successfully.');
     }
 
@@ -244,7 +245,7 @@ class AdminTraineeController extends Controller
         }
         
         if ($importCount > 0) {
-            return redirect()->route('admin.trainees.index')
+            return redirect()->route('admin-clerk.trainees.index')
                 ->with('bulk_import_success', true)
                 ->with('success', "Successfully imported $importCount trainees" . (count($errors) > 0 ? " with " . count($errors) . " errors" : ""));
         } else {

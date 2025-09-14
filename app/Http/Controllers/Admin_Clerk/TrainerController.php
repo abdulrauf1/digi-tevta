@@ -1,23 +1,24 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin_Clerk;
+
 use App\Models\User;
 use App\Models\Trainer;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
-class AdminTrainerController extends Controller
+class TrainerController extends Controller
 {
     public function index()
     {
         $trainers = Trainer::with(['user'])->paginate(10);
-        return view('admin.trainers.index', compact('trainers'));
+        return view('admin-clerk.trainers.index', compact('trainers'));
     }
 
     public function create()
     {
-        return view('admin.trainers.create');
+        return view('admin-clerk.trainers.create');
     }
 
     public function store(Request $request)
@@ -50,7 +51,7 @@ class AdminTrainerController extends Controller
             ));
 
 
-        return redirect()->route('admin.trainers.index')
+        return redirect()->route('admin-clerk.trainers.index')
             ->with('success', 'Trainer created successfully.');
     }
 
@@ -59,7 +60,7 @@ class AdminTrainerController extends Controller
         $trainer->load('trainer');
         $trainerData = $trainer->trainer->first();
         
-        return view('admin.trainers.show', compact(['trainer', 'trainerData']));
+        return view('admin-clerk.trainers.show', compact(['trainer', 'trainerData']));
     }
 
     public function edit(User $trainer)
@@ -67,7 +68,7 @@ class AdminTrainerController extends Controller
         $trainer->load('trainer');
         $trainerData = $trainer->trainer->first();
         // dd($trainerData);
-        return view('admin.trainers.edit',compact(['trainer', 'trainerData']));
+        return view('admin-clerk.trainers.edit',compact(['trainer', 'trainerData']));
     }
 
     public function update(Request $request, User $trainer)
@@ -104,7 +105,7 @@ class AdminTrainerController extends Controller
         ]);
         
 
-        return redirect()->route('admin.trainers.index')
+        return redirect()->route('admin-clerk.trainers.index')
             ->with('success', 'Trainer updated successfully.');
     }
 
@@ -117,7 +118,7 @@ class AdminTrainerController extends Controller
         Trainer::where('user_id', $trainer->id)->delete();
         
 
-        return redirect()->route('admin.trainers.index')
+        return redirect()->route('admin-clerk.trainers.index')
             ->with('success', 'Trainer deleted successfully.');
     }
 }

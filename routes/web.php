@@ -24,6 +24,10 @@ use App\Http\Controllers\Clerk\{
 
 use App\Http\Controllers\Trainer\{
     TrainerDashboardController,
+    TrainerCourseController,
+    TrainerEnrollmentController,
+    TrainerAttendanceController,
+    TrainerAssessmentController
 };
 
 use App\Http\Controllers\Trainee\{
@@ -84,10 +88,7 @@ Route::prefix('admin-clerk')->name('admin-clerk.')->middleware(['auth', 'verifie
         
         // Routes for bulk import functionality
         
-        Route::post('trainees/bulk-import', [TraineeController::class, 'bulkImport'])->name('trainees.bulk-import');
-
-        
-
+        Route::post('trainees/bulk-import', [TraineeController::class, 'bulkImport'])->name('trainees.bulk-import');        
 
         // Enrollments
         Route::resource('enrollments', EnrollmentController::class);
@@ -110,9 +111,34 @@ Route::middleware(['auth', 'role:admission-clerk'])->group(function () {
     // Admission clerk routes
 });
 
-Route::middleware(['auth', 'role:trainer'])->group(function () {
-    Route::get('/trainer/dashboard', [TrainerDashboardController::class, 'index'])->name('trainer.dashboard');
+Route::prefix('/trainer')->name('trainer.')->middleware(['auth', 'role:trainer'])->group(function () {
     // Trainer routes
+    
+    Route::get('/dashboard', [TrainerDashboardController::class, 'index'])->name('dashboard');
+    
+    // Courses
+    Route::get('/courses/{course}', [TrainerCourseController::class, 'show'])->name('courses.show');
+    
+    // Enrollments
+    Route::get('/enrollments/course/{course}', [TrainerEnrollmentController::class, 'courseEnrollments'])->name('enrollments.course');
+    Route::get('/enrollments/session/{session}', [TrainerEnrollmentController::class, 'sessionEnrollments'])->name('enrollments.session');
+    
+    // Attendance
+    Route::get('/attendance/create/{session}', [TrainerAttendanceController::class, 'create'])->name('attendance.create');
+    Route::post('/attendance/create/{session}', [TrainerAttendanceController::class, 'store'])->name('attendance.store');
+    Route::get('/attendance/session/{session}', [TrainerAttendanceController::class, 'sessionAttendance'])->name('attendance.session');
+    Route::get('/attendance/monthly/{session}', [TrainerAttendanceController::class, 'monthlyAttendance'])->name('attendance.monthly');
+    
+    // Leave Days
+    Route::get('/attendance/leave-day/{session}/create', [TrainerAttendanceController::class, 'createLeaveDay'])->name('attendance.create-leave-day');
+    Route::post('/attendance/leave-day/{session}', [TrainerAttendanceController::class, 'storeLeaveDay'])->name('attendance.store-leave-day');
+    Route::delete('/attendance/leave-day/{session}/{leaveDay}', [TrainerAttendanceController::class, 'deleteLeaveDay'])->name('attendance.delete-leave-day');
+
+    // Assessments
+    Route::get('/assessments/create/{session}', [TrainerAssessmentController::class, 'create'])->name('assessments.create');
+    Route::get('/assessments/session/{session}', [TrainerAssessmentController::class, 'sessionAssessments'])->name('assessments.session');
+    Route::get('/assessments/{assessment}', [TrainerAssessmentController::class, 'show'])->name('assessments.show');
+
 });
 
 Route::middleware(['auth', 'role:trainee'])->group(function () {

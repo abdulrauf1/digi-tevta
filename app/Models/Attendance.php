@@ -13,9 +13,19 @@ class Attendance extends Model
         'status'
     ];
 
+    protected $casts = [
+        'date' => 'date', // This will automatically cast the date field to a Carbon instance
+    ];
+
+
     public function enrollment(): BelongsTo
     {
         return $this->belongsTo(Enrollment::class);
+    }
+
+    public function session()
+    {
+        return $this->belongsTo(EnrollmentSession::class);
     }
 
 

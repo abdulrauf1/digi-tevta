@@ -7,15 +7,15 @@
 
     <!-- Current Session Section -->
     @if($currentSession)
-    <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-6 mb-8">
+    <div class="bg-blue-200 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-6 mb-8">
         <div class="flex items-center justify-between">
             <div>
-                <h3 class="text-lg font-semibold text-blue-800 dark:text-blue-200 flex items-center">
+                <h3 class="text-lg font-semibold text-blue-800 dark:text-blue-400 flex items-center">
                     <i class="fas fa-play-circle mr-2"></i> Current Session
                 </h3>
-                <p class="text-blue-600 dark:text-blue-300 mt-1">{{ $currentSession->name }}</p>
+                <p class="text-blue-600 dark:text-blue-400 mt-1">{{ $currentSession->name }}</p>
                 <div class="flex items-center mt-2 text-sm text-blue-500 dark:text-blue-400">
-                    <span class="mr-4"><i class="far fa-calendar-alt mr-1"></i> {{ $currentSession->start_date->format('M d, Y') }} - {{ $currentSession->end_date->format('M d, Y') }}</span>
+                    <span class="mr-4"><i class="far fa-calendar-alt mr-1"></i> {{ $currentSession->start_date }} - {{ $currentSession->end_date }}</span>
                     <span><i class="fas fa-users mr-1"></i> {{ $currentSession->enrollments_count }} trainees</span>
                 </div>
             </div>
@@ -110,12 +110,10 @@
                         </div>
                     </div>
                     <div class="flex space-x-2">
-                        <!-- route('trainer.courses.show', $course) -->
-                        <a href="" class="text-blue-500 hover:text-blue-700 text-sm font-medium">
+                        <a href="{{ route('trainer.courses.show', $course) }}" class="text-blue-500 hover:text-blue-700 text-sm font-medium">
                             <i class="fas fa-eye mr-1"></i> View Details
                         </a>
-                        <!-- route('trainer.enrollments.course', $course) -->
-                        <a href="" class="text-green-500 hover:text-green-700 text-sm font-medium">
+                        <a href="{{ route('trainer.enrollments.course', $course) }}" class="text-green-500 hover:text-green-700 text-sm font-medium">
                             <i class="fas fa-users mr-1"></i> Trainees
                         </a>
                     </div>
@@ -153,16 +151,13 @@
                         </div>
                     </div>
                     <div class="flex space-x-2">
-                        <!-- route('trainer.enrollments.session', $session) -->
-                        <a href="#" class="text-blue-500 hover:text-blue-700 text-sm font-medium">
+                        <a href="{{ route('trainer.enrollments.session', $session) }}" class="text-blue-500 hover:text-blue-700 text-sm font-medium">
                             <i class="fas fa-eye mr-1"></i> View Enrollments
                         </a>
-                        <!-- route('trainer.attendance.session', $session) -->
-                        <a href="#" class="text-green-500 hover:text-green-700 text-sm font-medium">
+                        <a href="{{ route('trainer.attendance.session', $session) }}" class="text-green-500 hover:text-green-700 text-sm font-medium">
                             <i class="fas fa-clipboard-check mr-1"></i> Attendance
                         </a>
-                        <!-- route('trainer.assessments.session', $session) -->
-                        <a href="#" class="text-purple-500 hover:text-purple-700 text-sm font-medium">
+                        <a href="{{ route('trainer.assessments.session', $session) }}" class="text-purple-500 hover:text-purple-700 text-sm font-medium">
                             <i class="fas fa-tasks mr-1"></i> Assessments
                         </a>
                     </div>

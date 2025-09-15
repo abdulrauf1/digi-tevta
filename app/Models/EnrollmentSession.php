@@ -17,7 +17,7 @@ class EnrollmentSession extends Model
         'status'
     ];
 
-    public function enrollments()
+    public function enrollment()
     {
         return $this->hasMany(Enrollment::class, 'session_id');
     }   
@@ -29,6 +29,6 @@ class EnrollmentSession extends Model
 
     public function gettOngoningSessionCourses()
     {
-        return $this->enrollments()->with('course')->get()->pluck('course')->unique('id');
+        return $this->enrollment()->with('course')->get()->pluck('course')->unique('id');
     }
 }

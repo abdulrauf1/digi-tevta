@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Trainer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
-use App\Models\Trainee;
-use App\Models\Attendance;
-use App\Models\TraineeAssessmentFile;
 use App\Models\EnrollmentSession;
+use App\Models\TraineeAssessmentFile;
 use App\Models\Enrollment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,66 +17,81 @@ class TrainerDashboardController extends Controller
     {
         $trainer = Auth::user()->trainer->first();
         
-        // Check if trainer exists
-        if (!$trainer) {
-            return redirect()->back()->with('error', 'No trainer profile found.');
-        }
-
-        // Get current session (ongoing session)
-        $currentSession = EnrollmentSession::where('status', 'ongoing')
-            ->whereHas('enrollments.course', function($query) use ($trainer) {
+        // Get current session - fixed query
+        $currentSession = EnrollmentSession::whereHas('enrollment.course', function($query) use ($trainer) {
                 $query->where('trainer_id', $trainer->id);
             })
-            ->with(['enrollments.course'])
-            ->withCount('enrollments')
+            ->where('start_date', '<=', now())
+            ->where('end_date', '>=', now())
+            ->with(['enrollment', 'enrollment.course'])
+            ->withCount('enrollment')
             ->first();
-
+            
+        // Get trainer's courses with enrollments count
+        $myCourses = Course::where('trainer_id', $trainer->id)
+            ->withCount('enrollment')
+            ->get();
+            
         // Get all enrollment sessions for this trainer
-        $enrollmentSessions = EnrollmentSession::whereHas('enrollments.course', function($query) use ($trainer) {
+        $enrollmentSessions = EnrollmentSession::whereHas('enrollment.course', function($query) use ($trainer) {
                 $query->where('trainer_id', $trainer->id);
             })
-            ->with(['enrollments.course'])
-            ->withCount('enrollments')
+            ->withCount('enrollment')
             ->orderBy('start_date', 'desc')
             ->get();
-
-        // Get trainer's courses with enrollment counts
-        $myCourses = Course::where('trainer_id', $trainer->id)
-            ->withCount('enrollments')
-            ->orderBy('name')
-            ->get();
-
-        // Calculate stats
-        $stats = [
-            'myCourses' => $myCourses->count(),
-            'myTrainees' => Trainee::whereHas('enrollments.course', function($query) use ($trainer) {
-                $query->where('trainer_id', $trainer->id);
-            })->distinct()->count(),
-            'todayAttendance' => Attendance::whereDate('date', today())
-                ->whereHas('enrollment.course', function($query) use ($trainer) {
-                    $query->where('trainer_id', $trainer->id);
-                })->count(),
-            'pendingAssessments' => TraineeAssessmentFile::where('status', 'pending')
-                ->whereHas('enrollment.course', function($query) use ($trainer) {
-                    $query->where('trainer_id', $trainer->id);
-                })->count(),
-        ];
-
+            
         // Get recent assessments
-        $recentAssessments = TraineeAssessmentFile::with(['enrollment.trainee.user', 'enrollment.course'])
-            ->whereHas('enrollment.course', function($query) use ($trainer) {
+        $recentAssessments = TraineeAssessmentFile::whereHas('enrollment.course', function($query) use ($trainer) {
                 $query->where('trainer_id', $trainer->id);
             })
-            ->latest()
-            ->take(5)
+            ->with(['enrollment.trainee.user', 'enrollment.session'])
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
             ->get();
-
+            
+        // Prepare stats
+        $stats = [
+            'myCourses' => $myCourses->count(),
+            'myTrainees' => $this->getMyTraineesCount($trainer),
+            'todayAttendance' => $this->getTodayAttendanceCount($trainer),
+            'pendingAssessments' => $this->getPendingAssessmentsCount($trainer),
+        ];
+        
         return view('trainer.dashboard', compact(
             'currentSession', 
+            'myCourses', 
             'enrollmentSessions', 
-            'stats', 
-            'recentAssessments',
-            'myCourses'
+            'recentAssessments', 
+            'stats'
         ));
+    }
+    
+    private function getMyTraineesCount($trainer)
+    {
+        return Enrollment::whereHas('course', function($query) use ($trainer) {
+                $query->where('trainer_id', $trainer->id);
+            })
+            ->distinct('trainee_id')
+            ->count('trainee_id');
+    }
+    
+    private function getTodayAttendanceCount($trainer)
+    {
+        // Implementation depends on your attendance model structure
+        // Assuming you have an Attendance model with date field and relationship to enrollment
+        return \App\Models\Attendance::whereHas('enrollment.course', function($query) use ($trainer) {
+                $query->where('trainer_id', $trainer->id);
+            })
+            ->whereDate('date', today())
+            ->count();
+    }
+    
+    private function getPendingAssessmentsCount($trainer)
+    {
+        return TraineeAssessmentFile::whereHas('enrollment.course', function($query) use ($trainer) {
+                $query->where('trainer_id', $trainer->id);
+            })
+            ->where('status', 'pending')
+            ->count();
     }
 }

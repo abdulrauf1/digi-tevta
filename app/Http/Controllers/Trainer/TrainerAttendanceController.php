@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Trainer;
 use App\Http\Controllers\Controller;
 use App\Models\EnrollmentSession;
 use App\Models\Attendance;
+use App\Models\Course;
 use App\Models\Enrollment;
 use Illuminate\Http\Request;
 use App\Models\LeaveDay;
@@ -14,10 +15,32 @@ use Carbon\Carbon;
 class TrainerAttendanceController extends Controller
 {
     /**
+     * Show the form for selecting a course to take attendance
+     */
+    public function selectCourse(Request $request)
+    {
+        $trainer = Auth::user()->trainer->first();
+        
+        // Get courses taught by this trainer
+        $courses = Course::where('trainer_id', $trainer->id)
+            ->with(['sessions' => function($query) {
+                $query->where('start_date', '<=', today())
+                    ->where('end_date', '>=', today())
+                    ->orderBy('name');
+            }])
+            ->get();
+            
+        return view('trainer.attendance.select-course', compact('courses'));
+    }
+    
+    /**
      * Show the form for creating attendance for a session
      */
-    public function create(EnrollmentSession $session)
+    public function create(Request $request, EnrollmentSession $session)
     {
+        // Get the course ID from the query parameter
+        $courseId = $request->query('course');
+        
         // Verify the trainer has access to this session
         $trainer = Auth::user()->trainer->first();
         
@@ -31,14 +54,17 @@ class TrainerAttendanceController extends Controller
         $enrollments = $session->enrollment()
             ->with('trainee.user')
             ->get();
-            
+        
         // Check if attendance already exists for today - FIXED QUERY
         $todayAttendance = Attendance::whereIn('enrollment_id', $enrollments->pluck('id'))
             ->whereDate('date', today())
             ->get()
             ->keyBy('enrollment_id');
             
-        return view('trainer.attendance.create', compact('session', 'enrollments', 'todayAttendance'));
+        // Get course for breadcrumbs
+        $course = $session->enrollment()->where('course_id',$courseId);
+        dd($course);
+        return view('trainer.attendance.create', compact('session', 'enrollments', 'todayAttendance', 'course'));
     }
     
     /**
@@ -88,6 +114,7 @@ class TrainerAttendanceController extends Controller
         return redirect()->route('trainer.attendance.session', $session)
             ->with('success', 'Attendance marked successfully.');
     }
+    
     
     /**
      * Show attendance for a specific session

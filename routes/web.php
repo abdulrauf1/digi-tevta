@@ -117,7 +117,9 @@ Route::prefix('/trainer')->name('trainer.')->middleware(['auth', 'role:trainer']
     Route::get('/dashboard', [TrainerDashboardController::class, 'index'])->name('dashboard');
     
     // Courses
+    Route::get('/courses', [TrainerCourseController::class, 'index'])->name('courses.index');
     Route::get('/courses/{course}', [TrainerCourseController::class, 'show'])->name('courses.show');
+    Route::get('/courses/{course}/enrollments', [TrainerCourseController::class, 'enrollments'])->name('enrollments.course');
     
     // Enrollments
     Route::get('/enrollments/course/{course}', [TrainerEnrollmentController::class, 'courseEnrollments'])->name('enrollments.course');
@@ -135,9 +137,13 @@ Route::prefix('/trainer')->name('trainer.')->middleware(['auth', 'role:trainer']
     Route::delete('/attendance/leave-day/{session}/{leaveDay}', [TrainerAttendanceController::class, 'deleteLeaveDay'])->name('attendance.delete-leave-day');
 
     // Assessments
+    Route::get('/assessments', [TrainerAssessmentController::class, 'index'])->name('assessments.index');
+    Route::get('/assessments/{assessment}', [TrainerAssessmentController::class, 'show'])->name('assessments.show');
     Route::get('/assessments/create/{session}', [TrainerAssessmentController::class, 'create'])->name('assessments.create');
     Route::get('/assessments/session/{session}', [TrainerAssessmentController::class, 'sessionAssessments'])->name('assessments.session');
-    Route::get('/assessments/{assessment}', [TrainerAssessmentController::class, 'show'])->name('assessments.show');
+    Route::post('/assessments', [TrainerAssessmentController::class, 'store'])->name('assessments.store');
+
+     
 
 });
 

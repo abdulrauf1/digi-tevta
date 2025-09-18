@@ -64,7 +64,7 @@
                             <div x-show="open" @click.away="open = false" class="absolute z-10 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2">
                                 <p class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700">Select a course:</p>
                                 @foreach($myCourses as $course)
-                                <a href="{{ route('trainer.assessments.create', ['session' => $currentSession, 'course' => $course->id]) }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-100 dark:hover:bg-purple-900">
+                                <a href="{{ route('trainer.assessments.index', ['session' => $currentSession, 'course' => $course->id]) }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-100 dark:hover:bg-purple-900">
                                     {{ $course->name }}
                                 </a>
                                 @endforeach
@@ -167,7 +167,8 @@
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
                     <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
                         <h3 class="text-lg font-medium text-gray-900 dark:text-white">Recent Assessments</h3>
-                        <a href="{{ route('trainer.assessments.index') }}" class="text-sm text-blue-500 hover:text-blue-700">View All</a>
+                        <!-- route('trainer.assessments.index') -->
+                        <a href="" class="text-sm text-blue-500 hover:text-blue-700">View All</a>
                     </div>
                     <div class="divide-y divide-gray-200 dark:divide-gray-700 max-h-96 overflow-y-auto">
                         @forelse($recentAssessments as $assessment)

@@ -50,20 +50,27 @@ class TrainerAttendanceController extends Controller
             abort(403, 'Unauthorized access to this session.');
         }
         
-        // Get all enrollments for this session with trainee details
-        $enrollments = $session->enrollment()
-            ->with('trainee.user')
-            ->get();
+        // Get enrollments for this session, optionally filtered by course
+        $enrollmentsQuery = $session->enrollment()->with('trainee.user');
         
-        // Check if attendance already exists for today - FIXED QUERY
+        if ($courseId) {
+            $enrollmentsQuery->where('course_id', $courseId);
+        }
+        
+        $enrollments = $enrollmentsQuery->get();
+        
+        // Get the course for breadcrumbs and display
+        $course = null;
+        if ($courseId) {
+            $course = Course::find($courseId);
+        }
+        
+        // Check if attendance already exists for today
         $todayAttendance = Attendance::whereIn('enrollment_id', $enrollments->pluck('id'))
             ->whereDate('date', today())
             ->get()
             ->keyBy('enrollment_id');
             
-        // Get course for breadcrumbs
-        $course = $session->enrollment()->where('course_id',$courseId);
-        dd($course);
         return view('trainer.attendance.create', compact('session', 'enrollments', 'todayAttendance', 'course'));
     }
     

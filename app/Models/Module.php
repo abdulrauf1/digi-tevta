@@ -19,6 +19,11 @@ class Module extends Model
         return $this->belongsTo(Course::class);
     }
 
+    public function assessmentFile(): HasMany
+    {
+        return $this->hasMany(TraineeAssessmentFile::class);
+    }
+
     public function assessmentPackages(): HasMany
     {
         return $this->hasMany(AssessmentPackage::class);
@@ -28,4 +33,6 @@ class Module extends Model
     {
         return $this->hasMany(DailyLessonPlan::class);
     }
+
+    
 }

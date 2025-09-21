@@ -140,13 +140,13 @@ Route::prefix('/trainer')->name('trainer.')->middleware(['auth', 'role:trainer']
     // Route::get('/assessments', [TrainerAssessmentController::class, 'index'])->name('assessments.index');
     // Route::get('/assessments/{assessment}', [TrainerAssessmentController::class, 'show'])->name('assessments.show');
     // Route::get('/assessments/create/{session}', [TrainerAssessmentController::class, 'create'])->name('assessments.create');
-    Route::get('/assessments/session/{session}', [TrainerAssessmentController::class, 'sessionAssessments'])->name('assessments.session');
+    // Route::get('/assessments/session/{session}', [TrainerAssessmentController::class, 'sessionAssessments'])->name('assessments.session');
     // Route::post('/assessments', [TrainerAssessmentController::class, 'store'])->name('assessments.store');
 
     Route::get('/assessments/{session}', [TrainerAssessmentController::class, 'index'])->name('assessments.index');
     Route::get('/assessments/create/{session}', [TrainerAssessmentController::class, 'create'])->name('assessments.create');
     Route::post('/courses/{courseId}/modules/{moduleId}/assessments', [TrainerAssessmentController::class, 'store'])->name('assessments.store');
-    Route::get('/courses/{courseId}/modules/{moduleId}/assessments', [TrainerAssessmentController::class, 'show'])->name('assessments.show');
+    Route::get('/assessments/{module}', [TrainerAssessmentController::class, 'show'])->name('assessments.show');
     Route::get('/assessments/{assessmentId}/edit', [TrainerAssessmentController::class, 'edit'])->name('assessments.edit');
     Route::put('/assessments/{assessmentId}', [TrainerAssessmentController::class, 'update'])->name('assessments.update');
     

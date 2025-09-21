@@ -45,7 +45,7 @@ class TrainerDashboardController extends Controller
         $recentAssessments = TraineeAssessmentFile::whereHas('enrollment.course', function($query) use ($trainer) {
                 $query->where('trainer_id', $trainer->id);
             })
-            ->with(['enrollment.trainee.user', 'enrollment.session'])
+            ->with(['enrollment.trainee.user', 'enrollment.enrollmentSession'])
             ->orderBy('created_at', 'desc')
             ->limit(5)
             ->get();
@@ -73,6 +73,8 @@ class TrainerDashboardController extends Controller
     
         $upcomingSessions = $stats['upcomingSessions'];
         $pendingTasks = $stats['pendingAssessments'];
+
+        
         return view('trainer.dashboard', compact(
             'currentSession', 'enrollmentSessions', 'myCourses', 
             'recentAssessments', 'stats', 'upcomingSessions', 'pendingTasks'

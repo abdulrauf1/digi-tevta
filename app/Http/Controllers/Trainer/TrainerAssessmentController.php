@@ -19,26 +19,95 @@ class TrainerAssessmentController extends Controller
     /**
      * Display a listing of the courses for the authenticated trainer.
      */
-    public function index(Request $request, EnrollmentSession $session)
+    public function index(EnrollmentSession $session, Request $request)
     {
-        // Get the course ID from the query parameter
-        $courseId = $request->query('course');
-
         $trainer = Auth::user()->trainer->first();
 
         $course = Course::with(['modules', 'enrollment.trainee.user'])
-                        ->where('id', $courseId)
-                        ->where('trainer_id', $trainer->id)
-                        ->firstOrFail();
+                    ->where('trainer_id', $trainer->id)
+                    ->firstOrFail();
 
-        
-        $selectedCourse = $course;
-        
-        $enrollments = $course->enrollment;
+        // Get assessments with filters
+        $assessments = TraineeAssessmentFile::with([
+                'enrollment.trainee.user', 
+                'modules' // Using the relationship name as defined in your model
+            ])
+            ->whereHas('enrollment', function($query) use ($course, $session) {
+                $query->where('course_id', $course->id)
+                    ->where('session_id', $session->id);
+            });
 
-        return view('trainer.assessments.index', compact('course','session','selectedCourse','enrollments'));
+        // Apply filters if they exist
+        if ($request->has('status') && $request->status != '') {
+            $assessments->where('status', $request->status);
+        }
+        
+        if ($request->has('result') && $request->result != '') {
+            $assessments->where('result', $request->result);
+        }
+        
+        if ($request->has('type') && $request->type != '') {
+            $assessments->where('type', $request->type);
+        }
+        
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $assessments->where(function($query) use ($search) {
+                $query->whereHas('enrollment.trainee.user', function($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                })->orWhereHas('modules', function($q) use ($search) { // Using plural to match relationship name
+                    $q->where('name', 'like', "%{$search}%");
+                });
+            });
+        }
+
+        // Handle export
+        if ($request->has('export') && $request->export == 'true') {
+            return $this->exportAssessments($assessments->get());
+        }
+
+        $assessments = $assessments->paginate(10);
+
+        return view('trainer.assessments.index', compact('course', 'session', 'assessments'));
     }
 
+    // Add this method to your controller for export functionality
+    private function exportAssessments($assessments)
+    {
+        $fileName = 'assessments_' . date('Y-m-d') . '.csv';
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
+        $columns = ['Trainee', 'Trainee CNIC', 'Module', 'Type', 'Status', 'Result', 'Submission Date'];
+
+        $callback = function() use($assessments, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+
+            foreach ($assessments as $assessment) {
+                $row = [
+                    $assessment->enrollment->trainee->user->name,
+                    $assessment->enrollment->trainee->cnic,
+                    $assessment->module->name ?? 'N/A',
+                    ucfirst($assessment->type),
+                    ucfirst($assessment->status),
+                    ucfirst($assessment->result),
+                    $assessment->submission_date ? \Carbon\Carbon::parse($assessment->submission_date)->format('M d, Y') : 'N/A'
+                ];
+
+                fputcsv($file, $row);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
  
     public function createEntries(Request $request)
     {
@@ -52,28 +121,22 @@ class TrainerAssessmentController extends Controller
 
         $module = Module::findOrFail($request->module_id);
         
-        // Check if the module has an assessment package
         if (!$module->assesment_package_link) {
             return redirect()->back()->with('error', 'Assessment package not configured for this module. Please contact administrator.');
         }
         
-        // Check if file exists - handle different path formats
         $filePath = $module->assesment_package_link;
         
-        // Remove leading slash if present to ensure consistent path handling
         if (strpos($filePath, '/') === 0) {
             $filePath = substr($filePath, 1);
         }
         
-        // Check if file exists in public path
         $fullPath = public_path($filePath);
         
         if (!file_exists($fullPath)) {
-            // Try alternative path - maybe the file is stored with storage_path instead
             $storagePath = storage_path('app/public/' . $filePath);
             
             if (!file_exists($storagePath)) {
-                // Try one more approach - check if it's a URL or just filename
                 $basename = basename($filePath);
                 $alternativePath = public_path('uploads/' . $basename);
                 
@@ -83,29 +146,35 @@ class TrainerAssessmentController extends Controller
                     $sourcePath = $alternativePath;
                 }
             } else {
-                // Use storage path
                 $sourcePath = $storagePath;
             }
         } else {
-            // Use public path
             $sourcePath = $fullPath;
         }
 
         $successCount = 0;
         $errorCount = 0;
+        $skippedCount = 0;
 
         foreach ($request->enrollment_ids as $enrollmentId) {
             try {
+                // Check if an entry already exists for this enrollment_id and module_id
+                $existingEntry = TraineeAssessmentFile::where('enrollment_id', $enrollmentId)
+                    ->where('module_id', $request->module_id)
+                    ->first();
+
+                if ($existingEntry) {
+                    $skippedCount++;
+                    continue;
+                }
+
                 $enrollment = Enrollment::with(['trainee.user', 'enrollmentSession', 'course.modules'])->findOrFail($enrollmentId);
                 
-                // Generate file name: sessionname_traineename_modulename.pdf
                 $sessionName = Str::slug($enrollment->enrollmentSession->name ?? 'nosession');
                 $traineeName = Str::slug($enrollment->trainee->user->name);
                 $moduleName = Str::slug($module->name);
                 $fileName = "{$sessionName}_{$traineeName}_{$moduleName}.pdf";
                 
-
-                // Create directory in storage if it doesn't exist
                 $directory = 'assessment_files/' . $enrollment->course->name . $enrollment->enrollmentSession->name . '/' . $module->name;
                 $fullDirectoryPath = storage_path('app/public/' . $directory);
                 
@@ -113,19 +182,15 @@ class TrainerAssessmentController extends Controller
                     mkdir($fullDirectoryPath, 0777, true);
                 }
                 
-                // Copy the PDF file to storage
                 $destinationPath = storage_path("app/public/{$directory}/{$fileName}");
                 
-                // Check if file already exists to avoid overwriting
                 if (file_exists($destinationPath)) {
-                    // Add timestamp to make filename unique
                     $timestamp = time();
                     $fileName = "{$sessionName}_{$traineeName}_{$moduleName}_{$timestamp}.pdf";
                     $destinationPath = storage_path("app/public/{$directory}/{$fileName}");
                 }
                 
                 if (copy($sourcePath, $destinationPath)) {
-                    // Create assessment entry with storage path
                     TraineeAssessmentFile::create([
                         'enrollment_id' => $enrollmentId,
                         'module_id' => $request->module_id,
@@ -138,7 +203,6 @@ class TrainerAssessmentController extends Controller
                     ]);
                     $successCount++;
                 } else {
-                    // If we can't copy, use the original file path
                     TraineeAssessmentFile::create([
                         'enrollment_id' => $enrollmentId,
                         'module_id' => $request->module_id,
@@ -158,11 +222,13 @@ class TrainerAssessmentController extends Controller
             }
         }
 
+        $message = "Operation completed: {$successCount} created, {$skippedCount} skipped (duplicates), {$errorCount} errors.";
+        
         if ($errorCount > 0) {
-            return redirect()->back()->with('warning', "Assessment entries created with {$successCount} successes and {$errorCount} errors. Some files may not have been copied correctly.");
+            return redirect()->back()->with('warning', $message);
         }
 
-        return redirect()->back()->with('success', "{$successCount} assessment entries created successfully.");
+        return redirect()->back()->with('success', $message);
     }
     
     /**
@@ -175,15 +241,19 @@ class TrainerAssessmentController extends Controller
 
         $trainer = Auth::user()->trainer->first();
 
-
-        $course = Course::with(['modules', 'enrollment.trainee'])
+        $course = Course::with(['modules', 'enrollment.trainee.user'])
                         ->where('id', $courseId)
                         ->where('trainer_id', $trainer->id)
                         ->firstOrFail();
+
         
+        $selectedCourse = $course;
         
+        $enrollments = $course->enrollment;
+
         
-        return view('trainer.assessments.create', compact('course'));
+
+        return view('trainer.assessments.create', compact('course','session','selectedCourse','enrollments'));
     }
 
     /**

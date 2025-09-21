@@ -8,79 +8,80 @@
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             
-            <!-- Welcome Card & Quick Actions -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                <!-- Welcome Card -->
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 col-span-1">
-                    <div class="flex items-center">
-                        <div class="p-3 rounded-full bg-indigo-100 dark:bg-indigo-900">
-                            <i class="fas fa-user-circle text-indigo-500 dark:text-indigo-300 text-xl"></i>
-                        </div>
-                        <div class="ml-4">
-                            <h3 class="text-lg font-medium text-gray-900 dark:text-white">Welcome, {{ Auth::user()->name }}</h3>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Here's your training overview for today</p>
-                        </div>
-                    </div>
-                    <div class="mt-4 grid grid-cols-2 gap-2">
-                        <div class="text-center p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
-                            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $upcomingSessions ?? 0 }}</p>
-                            <p class="text-xs text-gray-600 dark:text-gray-400">Upcoming Sessions</p>
-                        </div>
-                        <div class="text-center p-3 bg-green-50 dark:bg-green-900/30 rounded-lg">
-                            <p class="text-2xl font-bold text-green-600 dark:text-green-400">{{ $pendingTasks ?? 0 }}</p>
-                            <p class="text-xs text-gray-600 dark:text-gray-400">Pending Tasks</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Quick Actions -->
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 col-span-1 lg:col-span-2">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4 flex items-center">
-                        <i class="fas fa-bolt mr-2"></i> Quick Actions
-                    </h3>
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-                        <!-- Take Attendance with Course Selection -->
-                        <div x-data="{ open: false }" class="relative">
-                            <button @click="open = !open" class="w-full bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 p-3 rounded-lg text-center">
-                                <i class="fas fa-clipboard-check text-blue-500 dark:text-blue-300 text-xl mb-2"></i>
-                                <p class="text-sm font-medium text-blue-700 dark:text-blue-300">Take Attendance</p>
-                            </button>
-                            <div x-show="open" @click.away="open = false" class="absolute z-10 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2">
-                                <p class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700">Select a course:</p>
-                                @foreach($myCourses as $course)
-                                <a href="{{ route('trainer.attendance.create', ['session' => $currentSession, 'course' => $course->id]) }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900">
-                                    {{ $course->name }}
-                                </a>
-                                @endforeach
-                            </div>
-                        </div>
-                        
-                        <!-- Create Assessment with Course Selection -->
-                        <div x-data="{ open: false }" class="relative">
-                            <button @click="open = !open" class="w-full bg-purple-100 dark:bg-purple-900 hover:bg-purple-200 dark:hover:bg-purple-800 p-3 rounded-lg text-center">
-                                <i class="fas fa-plus-circle text-purple-500 dark:text-purple-300 text-xl mb-2"></i>
-                                <p class="text-sm font-medium text-purple-700 dark:text-purple-300">Create Assessment</p>
-                            </button>
-                            <div x-show="open" @click.away="open = false" class="absolute z-10 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2">
-                                <p class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700">Select a course:</p>
-                                @foreach($myCourses as $course)
-                                <a href="{{ route('trainer.assessments.index', ['session' => $currentSession, 'course' => $course->id]) }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-100 dark:hover:bg-purple-900">
-                                    {{ $course->name }}
-                                </a>
-                                @endforeach
-                            </div>
-                        </div>
-                        
-                        <a href="{{ route('trainer.courses.index') }}" class="bg-green-100 dark:bg-green-900 hover:bg-green-200 dark:hover:bg-green-800 p-3 rounded-lg text-center">
-                            <i class="fas fa-book text-green-500 dark:text-green-300 text-xl mb-2"></i>
-                            <p class="text-sm font-medium text-green-700 dark:text-green-300">My Courses</p>
-                        </a>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Current Session Section -->
             @if($currentSession)
+                <!-- Welcome Card & Quick Actions -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <!-- Welcome Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 col-span-1">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-indigo-100 dark:bg-indigo-900">
+                                <i class="fas fa-user-circle text-indigo-500 dark:text-indigo-300 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900 dark:text-white">Welcome, {{ Auth::user()->name }}</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Here's your training overview for today</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 grid grid-cols-2 gap-2">
+                            <div class="text-center p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
+                                <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $upcomingSessions ?? 0 }}</p>
+                                <p class="text-xs text-gray-600 dark:text-gray-400">Upcoming Sessions</p>
+                            </div>
+                            <div class="text-center p-3 bg-green-50 dark:bg-green-900/30 rounded-lg">
+                                <p class="text-2xl font-bold text-green-600 dark:text-green-400">{{ $pendingTasks ?? 0 }}</p>
+                                <p class="text-xs text-gray-600 dark:text-gray-400">Pending Tasks</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Actions -->
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 col-span-1 lg:col-span-2">
+                        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4 flex items-center">
+                            <i class="fas fa-bolt mr-2"></i> Quick Actions
+                        </h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            <!-- Take Attendance with Course Selection -->
+                            <div x-data="{ open: false }" class="relative">
+                                <button @click="open = !open" class="w-full bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 p-3 rounded-lg text-center">
+                                    <i class="fas fa-clipboard-check text-blue-500 dark:text-blue-300 text-xl mb-2"></i>
+                                    <p class="text-sm font-medium text-blue-700 dark:text-blue-300">Take Attendance</p>
+                                </button>
+                                <div x-show="open" @click.away="open = false" class="absolute z-10 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2">
+                                    <p class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700">Select a course:</p>
+                                    @foreach($myCourses as $course)
+                                    <a href="{{ route('trainer.attendance.create', ['session' => $currentSession, 'course' => $course->id]) }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900">
+                                        {{ $course->name }}
+                                    </a>
+                                    @endforeach
+                                </div>
+                            </div>
+                            
+                            <!-- Create Assessment with Course Selection -->
+                            <div x-data="{ open: false }" class="relative">
+                                <button @click="open = !open" class="w-full bg-purple-100 dark:bg-purple-900 hover:bg-purple-200 dark:hover:bg-purple-800 p-3 rounded-lg text-center">
+                                    <i class="fas fa-plus-circle text-purple-500 dark:text-purple-300 text-xl mb-2"></i>
+                                    <p class="text-sm font-medium text-purple-700 dark:text-purple-300">Create Assessment</p>
+                                </button>
+                                <div x-show="open" @click.away="open = false" class="absolute z-10 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2">
+                                    <p class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700">Select a course:</p>
+                                    @foreach($myCourses as $course)
+                                    <a href="{{ route('trainer.assessments.create', ['session' => $currentSession, 'course' => $course->id]) }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-100 dark:hover:bg-purple-900">
+                                        {{ $course->name }}
+                                    </a>
+                                    @endforeach
+                                </div>
+                            </div>
+                            
+                            <a href="{{ route('trainer.courses.index') }}" class="bg-green-100 dark:bg-green-900 hover:bg-green-200 dark:hover:bg-green-800 p-3 rounded-lg text-center">
+                                <i class="fas fa-book text-green-500 dark:text-green-300 text-xl mb-2"></i>
+                                <p class="text-sm font-medium text-green-700 dark:text-green-300">My Courses</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current Session Section -->
                 <div class="bg-blue-100 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-6 mb-8">
                     <div class="flex flex-col md:flex-row items-start md:items-center justify-between">
                         <div class="mb-4 md:mb-0">
@@ -239,8 +240,8 @@
                                 <a href="{{ route('trainer.attendance.session', $session) }}" class="text-green-500 hover:text-green-700 text-sm font-medium inline-flex items-center bg-green-50 dark:bg-green-900/30 hover:bg-green-100 dark:hover:bg-green-900/50 px-3 py-1 rounded">
                                     <i class="fas fa-clipboard-check mr-1"></i> Attendance
                                 </a>
-                                <a href="{{ route('trainer.assessments.session', $session) }}" class="text-purple-500 hover:text-purple-700 text-sm font-medium inline-flex items-center bg-purple-50 dark:bg-purple-900/30 hover:bg-purple-100 dark:hover:bg-purple-900/50 px-3 py-1 rounded">
-                                    <i class="fas fa-tasks mr-1"></i> Assessments
+                                <a href="{{ route('trainer.assessments.index', ['session' => $session]) }}" class="text-purple-500 hover:text-purple-700 text-sm font-medium inline-flex items-center bg-purple-50 dark:bg-purple-900/30 hover:bg-purple-100 dark:hover:bg-purple-900/50 px-3 py-1 rounded">
+                                    <i class="fas fa-tasks mr-1"></i> Assessment
                                 </a>
                             </div>
                         </div>

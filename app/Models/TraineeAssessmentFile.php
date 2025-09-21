@@ -11,6 +11,7 @@ class TraineeAssessmentFile extends Model
         'enrollment_id',
         'attendance_percentage',
         'module_id',
+        'submission_date',
         'type',
         'status',
         'evidence_guide_link',
@@ -26,5 +27,10 @@ class TraineeAssessmentFile extends Model
     public function evidence(): BelongsTo
     {
         return $this->belongsTo(Evidence::class);
+    }
+
+    public function modules(): BelongsTo
+    {
+        return $this->belongsTo(Module::class, 'module_id');
     }
 }
